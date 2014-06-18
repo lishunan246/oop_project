@@ -48,6 +48,8 @@ LoginWindow::LoginWindow(QWidget *parent):QDialog(parent)
 
     connect(okBtn,SIGNAL(clicked()),this,SLOT(accept()));
     connect(cancelBtn,SIGNAL(clicked()),this,SLOT(reject()));
+
+
 }
 LoginWindow::~LoginWindow()
 {
