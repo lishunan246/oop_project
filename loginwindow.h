@@ -10,9 +10,10 @@ class LoginWindow:public QDialog
 
 public:
     LoginWindow(QWidget *parent = 0);
-    ~LoginWindow();
 public slots:
     virtual void accept();
+    virtual void addPeople();
+    virtual void delPeople();
 private:
     QLineEdit* usrLineEdit;
     QLineEdit* pwdLineEdit;

@@ -1,4 +1,5 @@
 #include "loginwindow.h"
+#include <database.h>
 #include <QLabel>
 #include <QLineEdit>
 #include <QGridLayout>
@@ -14,6 +15,9 @@
 #include <QtXmlPatterns/QXmlNodeModelIndex>
 #include <QtXml>
 #include <QtXmlPatterns/QXmlItem>
+#include <QtSql>
+
+extern database db;
 
 LoginWindow::LoginWindow(QWidget *parent):QDialog(parent)
 {
@@ -31,9 +35,13 @@ LoginWindow::LoginWindow(QWidget *parent):QDialog(parent)
 
     QPushButton* okBtn=new QPushButton(tr("确定"));
     QPushButton* cancelBtn=new QPushButton(tr("取消"));
+    QPushButton* addPeopleBtn=new QPushButton(tr("添加人员"));
+    QPushButton* delPeopleBtn=new QPushButton(tr("删除人员"));
     QHBoxLayout* btnLayout=new QHBoxLayout;
     btnLayout->addWidget(okBtn);
     btnLayout->addWidget(cancelBtn);
+    btnLayout->addWidget(addPeopleBtn);
+    btnLayout->addWidget(delPeopleBtn);
     btnLayout->setSpacing(60);
     QVBoxLayout* windowLayout =new QVBoxLayout;
 
@@ -48,31 +56,104 @@ LoginWindow::LoginWindow(QWidget *parent):QDialog(parent)
 
     connect(okBtn,SIGNAL(clicked()),this,SLOT(accept()));
     connect(cancelBtn,SIGNAL(clicked()),this,SLOT(reject()));
+    connect(addPeopleBtn,SIGNAL(clicked()),this,SLOT(addPeople()));
+    connect(delPeopleBtn,SIGNAL(clicked()),this,SLOT(delPeople()));
 
 
 }
-LoginWindow::~LoginWindow()
+
+void LoginWindow::delPeople()
 {
+    QString username=usrLineEdit->text().trimmed();
+    if(!db.delUser(username))
+    {
+        QMessageBox::warning(this,"Error","Unable to delete people",QMessageBox::Yes);
+    }
+    else
+    {
 
+        QMessageBox::information(this,"Success","delete successful",QMessageBox::Yes);
+    }
+}
 
+void LoginWindow::addPeople()
+{
+    QString username=usrLineEdit->text().trimmed();
+    QString password=pwdLineEdit->text().trimmed();
+
+    if(!db.newUser(username,password,"student"))
+    {
+        QMessageBox::warning(this,"Error","Unable to addPeople",QMessageBox::Yes);
+    }
+    else
+    {
+
+        QMessageBox::information(this,"Success","add successful",QMessageBox::Yes);
+    }
 
 }
+
+/*void LoginWindow::accept()
+{
+    QFile xq("myquery.xq");
+       QString fileName("the filename");
+       QString publisherName("the publisher");
+       qlonglong year = 1234;
+
+       QXmlQuery query;
+
+       query.bindVariable("file", QVariant(fileName));
+       query.bindVariable("publisher", QVariant(publisherName));
+       query.bindVariable("year", QVariant(year));
+
+       query.setQuery(&xq, QUrl::fromLocalFile(xq.fileName()));
+
+       QXmlResultItems result;
+       query.evaluateTo(&result);
+       QXmlItem item(result.next());
+       while (!item.isNull()) {
+           if (item.isAtomicValue()) {
+               QVariant v = item.toAtomicValue();
+               switch (v.type()) {
+                   case QVariant::LongLong:
+                       // xs:integer
+                       break;
+                   case QVariant::String:
+                       // xs:string
+                       break;
+                   default:
+                       // error
+                       break;
+               }
+           }
+           else if (item.isNode()) {
+   #ifdef qdoc
+               QXmlNodeModelIndex i = item.toNodeModelIndex();
+               // process node
+   #endif // qdoc
+           }
+           item = result.next();
+       }
+
+}
+*/
+
 void LoginWindow::accept()
 {
+    QString username=usrLineEdit->text().trimmed();
+    QString password=pwdLineEdit->text().trimmed();
 
+    if(!db.checkPassword(username,password))
+    {
+        QMessageBox::warning(this,"Error","Unable to login",QMessageBox::Yes);
+    }
+    else
+    {
 
-    QXmlQuery query;
+        QMessageBox::information(this,"Success","login successful",QMessageBox::Yes);
+    }
+
 }
-
-/*
-void LoginWindow::accept()
-{
-    QString a=usrLineEdit->text().trimmed();
-    QString b=pwdLineEdit->text().trimmed();
-
-    QMessageBox::warning(this,a,b,QMessageBox::Yes);
-
-}*/
 /*
 void LoginWindow::accept()
 {
