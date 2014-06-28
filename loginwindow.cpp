@@ -142,15 +142,21 @@ void LoginWindow::accept()
 {
     QString username=usrLineEdit->text().trimmed();
     QString password=pwdLineEdit->text().trimmed();
+    people *p;
+    int id=db.checkPassword(username,password);
 
-    if(!db.checkPassword(username,password))
+    if(!id)
     {
         QMessageBox::warning(this,"Error","Unable to login",QMessageBox::Yes);
     }
     else
     {
+        QString a,b;
+        a=db.getTypeByUid(id);
+        b=db.getUsernameByUid(id);
+        qDebug()<<"type:"<<a<<endl;
 
-        QMessageBox::information(this,"Success","login successful",QMessageBox::Yes);
+        QMessageBox::information(this,a,b,QMessageBox::Yes);
     }
 
 }

@@ -18,8 +18,10 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     loginwindow.cpp \
-    database.cpp
+    database.cpp \
+    people.cpp
 
 HEADERS  += mainwindow.h \
     loginwindow.h \
-    database.h
+    database.h \
+    people.h

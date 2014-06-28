@@ -26,9 +26,41 @@ bool database::connect()
     }
 }
 
-
-bool database::checkPassword(const QString &username, const QString &password)
+QString database::getTypeByUid(const int &id)
 {
+    QString a;
+    a.setNum(id);
+    QSqlTableModel model(0,db);
+    model.setTable("people");
+    model.setFilter(QString("uid=")+a);
+    model.select();
+    QString t;
+    t=model.record(0).value("type").toString();
+    qDebug()<<model.query().lastQuery();
+
+    return t;
+
+}
+QString database::getUsernameByUid(const int &id)
+{
+    QString a;
+    a.setNum(id);
+    QSqlTableModel model(0,db);
+    model.setTable("people");
+    model.setFilter(QString("uid=")+a);
+    model.select();
+    QString t;
+    t=model.record(0).value("username").toString();
+    qDebug()<<model.query().lastQuery();
+
+    return t;
+
+}
+
+int database::checkPassword(const QString &username, const QString &password)
+{
+    if(username==NULL)
+        return false;
     qDebug()<<"u:"<<username<<endl;
     qDebug()<<"p:"<<password<<endl;
 
@@ -42,7 +74,15 @@ bool database::checkPassword(const QString &username, const QString &password)
     qDebug()<<"t:"<<t<<endl;
     qDebug()<<model.filter()<<model.rowCount()<<endl;
     qDebug()<<db.lastError().text()<<endl;
-    return t==password;
+
+    QString a,b,c;
+    a=model.record(0).value("uid").toString();
+    b=model.record(0).value("username").toString();
+    c=model.record(0).value("type").toString();
+    if(t==password)
+        return a.toInt();
+    else
+        return false;
 }
  bool database::newUser(const QString &username, const QString &password,const QString& type)//向数据库中插入新用户
  {
