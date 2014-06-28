@@ -2,10 +2,7 @@
 #include <QSqlTableModel>
 #include <QTableView>
 
-database::database()
-{
 
-}
 bool database::connect()
 {
     db=QSqlDatabase::addDatabase("QMYSQL","coonA");
@@ -99,10 +96,12 @@ int database::checkPassword(const QString &username, const QString &password)
     return i;
  }
 
- bool database::delUser(const QString &username)
+ bool database::delUser(const int &id)
  {
+     QString str;
+     str.setNum(id);
      QSqlQuery query(db);
-     query.prepare("DELETE FROM people WHERE username=\'"+username+"\'");
+     query.prepare("DELETE FROM people WHERE uid="+str);
 
      bool i =query.exec();
      qDebug()<<db.isOpenError()<<endl;
@@ -110,3 +109,48 @@ int database::checkPassword(const QString &username, const QString &password)
      qDebug()<<query.lastError().text()<<endl;
      return i;
  }
+
+ bool database::addLecture(const QString &lname, const QString &ltype, const QString &classroom, const int &tid, const float &credit, const int &day, const int &time)
+ {
+     QSqlQuery query(db);
+     query.prepare("INSERT INTO lecture (ltype, classroom, lname,tid,credit,day,time) "
+                        "VALUES (:ltype, :classroom, :lname,:tid,:credit,:day,:time)");
+     query.bindValue(":lname", lname);
+     query.bindValue(":ltype", ltype);
+     query.bindValue(":classroom", classroom);
+     query.bindValue(":day",day);
+     query.bindValue(":time",time);
+     query.bindValue(":credit",credit);
+     query.bindValue(":tid",tid);
+     bool i =query.exec();
+     qDebug()<<db.isOpenError()<<endl;
+     qDebug()<<db.isOpen()<<endl;
+     qDebug()<<query.lastError().text()<<endl;
+     return i;
+ }
+bool database::delLecture(const int &lid)
+{
+    QString str;
+    str.setNum(lid);
+    QSqlQuery query(db);
+    query.prepare("DELETE FROM lecture WHERE lid="+str);
+
+    bool i =query.exec();
+
+    qDebug()<<query.lastError().text()<<endl;
+    return i;
+}
+QSqlTableModel *database::getLecureByType(const QString &type)
+{
+
+    model=new QSqlTableModel(0,db);
+    model->setTable("lecture");
+    model->setFilter("ltype='"+type+"'");
+    model->select();
+    qDebug()<<model->query().lastQuery()<<model->record(0).value("lid");
+    return model;
+
+
+
+
+}

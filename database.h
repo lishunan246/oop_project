@@ -5,14 +5,40 @@
 class database
 {
     QSqlDatabase db;
+
+    QSqlTableModel* model;
 public:
-    database();
+    database()
+    {
+
+    }
+
+    virtual ~database()
+    {
+
+        delete model;
+    }
+
     bool connect();//连接数据库
     int checkPassword(const QString& username,const QString& password);
     bool newUser(const QString& username,const QString& password,const QString& type);
-    bool delUser(const QString& username);
+    bool delUser(const int& id);
     QString getTypeByUid(const int& id);
     QString getUsernameByUid(const int& uid);
+
+    bool addLecture(
+            const QString& lname,
+            const QString& ltype,
+            const QString& classroom,
+            const int& tid,
+            const float& credit,
+            const int& day,
+            const int& time
+            );
+    bool delLecture(const int& lid);
+
+    QSqlTableModel* getLecureByType(const QString& type);
+
 };
 
 #endif // DATABASE_H

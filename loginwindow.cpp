@@ -16,6 +16,7 @@
 #include <QtXml>
 #include <QtXmlPatterns/QXmlItem>
 #include <QtSql>
+#include <QTableView>
 
 extern database db;
 
@@ -64,16 +65,13 @@ LoginWindow::LoginWindow(QWidget *parent):QDialog(parent)
 
 void LoginWindow::delPeople()
 {
-    QString username=usrLineEdit->text().trimmed();
-    if(!db.delUser(username))
-    {
-        QMessageBox::warning(this,"Error","Unable to delete people",QMessageBox::Yes);
-    }
-    else
-    {
+    QSqlTableModel* a;
+    a=db.getLecureByType("通识");
+    QTableView* b=new QTableView;
+    b->setModel(a);
+    b->show();
+    qDebug()<<"lid:"<<a->record(0).value("lid")<<endl;
 
-        QMessageBox::information(this,"Success","delete successful",QMessageBox::Yes);
-    }
 }
 
 void LoginWindow::addPeople()
@@ -142,7 +140,7 @@ void LoginWindow::accept()
 {
     QString username=usrLineEdit->text().trimmed();
     QString password=pwdLineEdit->text().trimmed();
-    people *p;
+
     int id=db.checkPassword(username,password);
 
     if(!id)
