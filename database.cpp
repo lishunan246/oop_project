@@ -260,7 +260,7 @@ QSqlQueryModel *database::getScheduleOfStudent(const int& uid)
     QString u;
     u.setNum(uid);
     QSqlQueryModel* qmodel=new QSqlQueryModel(0);
-    qmodel->setQuery(QSqlQuery("select * from people"));
+    qmodel->setQuery(QSqlQuery("SELECT lname,lid,day,time,classroom FROM `take` natural join lecture natural join people WHERE uid="+u));
     qDebug()<<qmodel->query().lastQuery()<<qmodel->record(0).value("lid");
     return qmodel;
 }
