@@ -65,11 +65,10 @@ LoginWindow::LoginWindow(QWidget *parent):QDialog(parent)
 
 void LoginWindow::delPeople()
 {
-    qDebug()<<"add"<<db.delTake(3,4)<<endl;
-    return;
+
     //db.setGrade(2,1,30);
     QSqlQueryModel* a;
-    a=db.getScheduleOfStudent(5);
+    a=db.getPeopleByType("student");
 
     QTableView* b=new QTableView;
     b->setModel(a);

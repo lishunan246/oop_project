@@ -270,3 +270,12 @@ QSqlQueryModel *database::getScheduleOfStudent(const int& uid)
     qDebug()<<qmodel->query().lastQuery()<<qmodel->record(0).value("lid");
     return qmodel;
 }
+QSqlTableModel* database::getPeopleByType(const QString &type)
+{
+    model=new QSqlTableModel(0,db);
+    model->setTable("people");
+    model->setFilter("type='"+type+"'");
+    model->select();
+    qDebug()<<model->query().lastQuery()<<model->record(0).value("lid");
+    return model;
+}

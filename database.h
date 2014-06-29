@@ -23,6 +23,7 @@ public:
     int checkPassword(const QString& username,const QString& password);
     bool newUser(const QString& username,const QString& password,const QString& type);
     bool delUser(const int& id);
+    QSqlTableModel* getPeopleByType(const QString& type);
     QString getTypeByUid(const int& id);
     QString getUsernameByUid(const int& uid);
 
