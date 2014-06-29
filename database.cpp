@@ -217,3 +217,43 @@ bool database::delTake(const int& lid,const int& uid)
     qDebug()<<query.lastError().text()<<endl;
     return i;
 }
+bool database::setGrade(const int& lid,const int& uid,const int& grade)
+{
+    QString l,u,g;
+    l.setNum(lid);
+    u.setNum(uid);
+    g.setNum(grade);
+
+    QSqlQuery query(db);
+    query.prepare("UPDATE take set grade = "+g+" where lid ="+l+" and uid ="+u);
+    bool i =query.exec();
+    qDebug()<<db.isOpenError()<<endl;
+    qDebug()<<query.lastQuery()<<endl;
+    qDebug()<<query.lastError().text()<<endl;
+    return i;
+
+}
+QSqlTableModel* database::getScheduleOfTeacher(const int& uid)
+{
+    if(getTypeByUid(uid)!="teacher")
+        return NULL;
+    QString u;
+    u.setNum(uid);
+    model=new QSqlTableModel(0,db);
+    model->setTable("lecture");
+    model->setFilter("tid="+u);
+    model->select();
+    qDebug()<<model->query().lastQuery()<<model->record(0).value("lid");
+    return model;
+}
+QSqlQueryModel *database::getScheduleOfStudent(const int& uid)
+{
+    if(getTypeByUid(uid)!="student")
+        return NULL;
+    QString u;
+    u.setNum(uid);
+    QSqlQueryModel* qmodel=new QSqlQueryModel(0);
+    qmodel->setQuery(QSqlQuery("select * from people"));
+    qDebug()<<qmodel->query().lastQuery()<<qmodel->record(0).value("lid");
+    return qmodel;
+}
