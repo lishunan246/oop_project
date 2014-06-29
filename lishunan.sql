@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 2014-06-29 05:59:17
+-- Generation Time: 2014-06-29 12:00:00
 -- 服务器版本： 5.6.16
 -- PHP Version: 5.5.9
 
@@ -87,15 +87,17 @@ CREATE TABLE IF NOT EXISTS `take` (
   `uid` int(11) NOT NULL,
   `grade` int(11) DEFAULT NULL,
   PRIMARY KEY (`tid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=7 ;
 
 --
 -- 转存表中的数据 `take`
 --
 
 INSERT INTO `take` (`tid`, `lid`, `uid`, `grade`) VALUES
-(1, 2, 1, NULL),
-(2, 2, 2, 22);
+(1, 2, 1, 30),
+(2, 2, 2, 22),
+(3, 2, 5, NULL),
+(4, 2, 5, NULL);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

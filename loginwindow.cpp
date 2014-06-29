@@ -68,7 +68,7 @@ void LoginWindow::delPeople()
 
     //db.setGrade(2,1,30);
     QSqlQueryModel* a;
-    a=db.getPeopleByType("student");
+    a=db.getScheduleOfStudent(5);
 
     QTableView* b=new QTableView;
     b->setModel(a);
