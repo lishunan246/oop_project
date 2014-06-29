@@ -36,8 +36,13 @@ public:
             const int& time
             );
     bool delLecture(const int& lid);
+    bool addTake(const int& lid,const int& uid);
+    bool delTake(const int& lid,const int& uid);
 
     QSqlTableModel* getLecureByType(const QString& type);
+    QSqlTableModel* getStudentByLid(const int& lid);
+    QSqlTableModel* getGradeByUid(const int& uid);
+    //QSqlRecord getStudentByLid(const int& lid);
 
 };
 

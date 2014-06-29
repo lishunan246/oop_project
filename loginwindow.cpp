@@ -66,7 +66,7 @@ LoginWindow::LoginWindow(QWidget *parent):QDialog(parent)
 void LoginWindow::delPeople()
 {
     QSqlTableModel* a;
-    a=db.getLecureByType("通识");
+    a=db.getGradeByUid(2);
     QTableView* b=new QTableView;
     b->setModel(a);
     b->show();

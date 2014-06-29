@@ -1,6 +1,7 @@
 #include "database.h"
 #include <QSqlTableModel>
 #include <QTableView>
+#include <QSqlQuery>
 
 
 bool database::connect()
@@ -142,15 +143,77 @@ bool database::delLecture(const int &lid)
 }
 QSqlTableModel *database::getLecureByType(const QString &type)
 {
-
     model=new QSqlTableModel(0,db);
     model->setTable("lecture");
     model->setFilter("ltype='"+type+"'");
     model->select();
     qDebug()<<model->query().lastQuery()<<model->record(0).value("lid");
     return model;
+}
+/*
+QSqlRecord database::getStudentByLid(const int &lid)
+{
+    QString id;
+    id.setNum(lid);
+    QSqlQuery a;
 
+    a.exec("SELECT * FROM `take` natural join`people` WHERE lid="+id);
 
+    return a.record();
+}
+*/
+QSqlTableModel* database::getStudentByLid(const int& lid)
+{
+    QString id;
+    id.setNum(lid);
+    QSqlRelationalTableModel* rmodel=new QSqlRelationalTableModel(0,db);
+    rmodel->setTable("take");
+    rmodel->setRelation(2,QSqlRelation("people","uid","username"));
+    //rmodel->setRelation(1,QSqlRelation("lecture","lid","lname"));
+    rmodel->setFilter("lid="+id);
+    rmodel->select();
+    model=rmodel;
+    return model;
+}
+ QSqlTableModel* database::getGradeByUid(const int& uid)
+ {
+     QString id;
+     id.setNum(uid);
+     QSqlRelationalTableModel* rmodel=new QSqlRelationalTableModel(0,db);
+     rmodel->setTable("take");
+     //rmodel->setRelation(2,QSqlRelation("people","uid","username"));
+     rmodel->setRelation(1,QSqlRelation("lecture","lid","lname"));
+     //rmodel->setFilter("grade is not null");
+     rmodel->setFilter("grade is not null and uid="+id);
+     rmodel->select();
+     model=rmodel;
+     return model;
+ }
+bool database::addTake(const int& lid,const int& uid)
+{
+    QSqlQuery query(db);
+    query.prepare("INSERT INTO take (lid, uid) "
+                       "VALUES (:lid, :uid)");
+    query.bindValue(":lid", lid);
+    query.bindValue(":uid", uid);
 
+    bool i =query.exec();
 
+    qDebug()<<query.lastError().text()<<endl;
+    return i;
+}
+
+bool database::delTake(const int& lid,const int& uid)
+{
+    QString l,u;
+    l.setNum(lid);
+    u.setNum(uid);
+    QSqlQuery query(db);
+    query.prepare("DELETE FROM people WHERE uid= "+u+" and lid= "+l);
+
+    bool i =query.exec();
+    qDebug()<<db.isOpenError()<<endl;
+    qDebug()<<db.isOpen()<<endl;
+    qDebug()<<query.lastError().text()<<endl;
+    return i;
 }
