@@ -6,7 +6,7 @@
 
 bool database::connect()
 {
-    db=QSqlDatabase::addDatabase("QMYSQL","coonA");
+    db=QSqlDatabase::addDatabase("QMYSQL");
     db.setHostName("127.0.0.1");
     db.setDatabaseName("lishunan");
     db.setUserName("lishunan");
@@ -191,6 +191,13 @@ QSqlTableModel* database::getStudentByLid(const int& lid)
  }
 bool database::addTake(const int& lid,const int& uid)
 {
+    QSqlQuery q(db);
+    QString l,u;
+    l.setNum(lid);
+    u.setNum(uid);
+    q.exec("SELECT * from take where lid="+l+" and uid ="+u);
+    if(q.record().count()>0)
+        return false;
     QSqlQuery query(db);
     query.prepare("INSERT INTO take (lid, uid) "
                        "VALUES (:lid, :uid)");
@@ -209,7 +216,7 @@ bool database::delTake(const int& lid,const int& uid)
     l.setNum(lid);
     u.setNum(uid);
     QSqlQuery query(db);
-    query.prepare("DELETE FROM people WHERE uid= "+u+" and lid= "+l);
+    query.prepare("DELETE FROM take WHERE uid= "+u+" and lid= "+l);
 
     bool i =query.exec();
     qDebug()<<db.isOpenError()<<endl;
