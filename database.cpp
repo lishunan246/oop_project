@@ -214,8 +214,13 @@ bool database::addTake(const int& lid,const int& uid)
 bool database::delTake(const int& lid,const int& uid)
 {
     QString l,u;
+    QSqlQuery q(db);
     l.setNum(lid);
     u.setNum(uid);
+    q.exec("SELECT * from take where lid="+l+" and uid ="+u);
+    //qDebug()<<q.record().value(<<endl;
+    if(!q.next())
+        return false;
     QSqlQuery query(db);
     query.prepare("DELETE FROM take WHERE uid= "+u+" and lid= "+l);
 
