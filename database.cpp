@@ -196,7 +196,8 @@ bool database::addTake(const int& lid,const int& uid)
     l.setNum(lid);
     u.setNum(uid);
     q.exec("SELECT * from take where lid="+l+" and uid ="+u);
-    if(q.record().count()>0)
+    //qDebug()<<q.record().value(<<endl;
+    if(q.next())
         return false;
     QSqlQuery query(db);
     query.prepare("INSERT INTO take (lid, uid) "

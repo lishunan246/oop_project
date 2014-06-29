@@ -65,6 +65,8 @@ LoginWindow::LoginWindow(QWidget *parent):QDialog(parent)
 
 void LoginWindow::delPeople()
 {
+    qDebug()<<"add"<<db.delTake(3,4)<<endl;
+    return;
     //db.setGrade(2,1,30);
     QSqlQueryModel* a;
     a=db.getScheduleOfStudent(5);
